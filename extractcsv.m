@@ -59,11 +59,12 @@ for i=3:length(filelist)
         end
         
         
-        % Lets try to convert them to doubles (plz)
+        % Var name is going to be topicname
         topicname = genvarname(filename(1:end-4));
-        display(['Populating Topic : ' , topicname , ' with ',num2str(length(varnames)),' subtopics ||| ' 'Completion %' , num2str(i/length(filelist)) ])
+        display(['%', num2str(i/length(filelist)) , ' Done || Populating Topic : ' , topicname , ' with ',num2str(length(varnames)),' subtopics ||| ' 'Completion %'  ])
         for j = 1: length(varnames)
-            if isnan(str2double(dataArray{:,j}))
+            % Check first 10 samples and convert them to doubles (otherwise too slow) 
+            if isnan(str2double(dataArray{:,j}(1:10)))
                 eval([topicname '.(varnames{j})= dataArray{:,j};']);
             else
                 eval([topicname '.(varnames{j})= str2double(dataArray{:,j});']);
@@ -72,7 +73,8 @@ for i=3:length(filelist)
         end
         
         
-        
+    topiclist{i} =topicname;
     end
+    
 end
 
