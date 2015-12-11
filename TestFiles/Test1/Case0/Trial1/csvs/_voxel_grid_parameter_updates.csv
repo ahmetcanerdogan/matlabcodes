@@ -1,0 +1,2 @@
+%time,field.bools0.name,field.bools0.value,field.bools1.name,field.bools1.value,field.strs0.name,field.strs0.value,field.strs1.name,field.strs1.value,field.strs2.name,field.strs2.value,field.doubles0.name,field.doubles0.value,field.doubles1.name,field.doubles1.value,field.doubles2.name,field.doubles2.value,field.groups0.name,field.groups0.state,field.groups0.id,field.groups0.parent
+1449615725547289555,filter_limit_negative,0,keep_organized,0,filter_field_name,z,input_frame,,output_frame,,leaf_size,0.01,filter_limit_min,0.1,filter_limit_max,2.0,Default,1,0,0
