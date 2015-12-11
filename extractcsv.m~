@@ -1,4 +1,4 @@
-% function extractcsv(input)
+% function alldata = extractcsv(input)
 
 %Test this
 % subject = input(1);
