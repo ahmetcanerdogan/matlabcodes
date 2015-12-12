@@ -1,0 +1,2 @@
+%time,field.ints0.name,field.ints0.value,field.doubles0.name,field.doubles0.value,field.doubles1.name,field.doubles1.value,field.doubles2.name,field.doubles2.value,field.doubles3.name,field.doubles3.value,field.doubles4.name,field.doubles4.value,field.groups0.name,field.groups0.state,field.groups0.id,field.groups0.parent
+1449618002644732239,MODE,1,ALPHA_THRESH,0.7,HORIZON,3.0,V_MULTIPLIER,1.0,DSIM_RECFG,0.1,TAU_GOAL,3.0,Default,1,0,0
