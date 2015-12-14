@@ -8,6 +8,7 @@ odom.timeinsec = (odom.header.stamp*10^-9-k);
 footprint.timeinsec = (footprint.header.stamp*10^-9-k);
 ara = 10;
 pose = [odom.pose.pose.position.x,odom.pose.pose.position.y,odom.pose.pose.position.z];
+ucmd.vec = [sqrt(0.5) * ucmd.command.linear.x/ 0.3520 ,sqrt(0.5) * ucmd.command.angular.z/0.4 ,zeros(length(ucmd.command.angular.z),1)]
 
 firstcommandtime = ucmd.timeinsec(find(ucmd.command.linear.x + ucmd.command.angular.z ,1));
 
