@@ -85,6 +85,7 @@ folderoffile = [currentdir , '/TestFiles/' , name];
             end
             
             output.time = str2double(dataArray{:,1});
+            output.header.stamp = str2double(dataArray{:,3});
             
             
             
