@@ -32,11 +32,12 @@ for t = 1: length(odom.pose.pose.position.x)
     rott(t,:) = qvrot( [invquat(2),invquat(3),invquat(4),invquat(1)], xvector);
 %      [yaw(t), pitch(t), roll(t)] = quat2angle(quatinv(current_quat));
 end
-
+        ButtonHandle = uicontrol('Style', 'PushButton', ...
+                         'String', 'Stop loop', ...
+                         'Callback', 'delete(gcbf)');
 plot(pose(1:ara:end,1),pose(1:ara:end,2))
 
 hold on
-
 for t = 1:ara: length(odom.pose.pose.position.x)
      current_time = odom.timeinsec(t);
     current_quat = quats(t,:);
@@ -46,7 +47,8 @@ for t = 1:ara: length(odom.pose.pose.position.x)
 current_vec = ucmd.vec(minindu,:);
     cmd_rot = qvrot( [invquat(2),invquat(3),invquat(4),invquat(1)], current_vec);
 
-    clf;
+    cla;
+
     figure(1)
     plot(pose(1:ara:end,1),pose(1:ara:end,2))
     hold on
@@ -62,10 +64,14 @@ current_foot = [footprint.polygon.points0.x(minindf) , footprint.polygon.points0
 fill (current_foot(:,1),current_foot(:,2),'r')
     quiver(pose(t,1),pose(t,2),cmd_rot(1) , cmd_rot(2) , 'Linewidth',4)
     plot(obswithtime{minindc(1)}(:,1),obswithtime{minindc(1)}(:,2),'.')
-    
-  
     pause(0.3)
+
+  if ~ishandle(ButtonHandle)
+    disp('Loop stopped by user');
+    break;
+  end
     
+
 
 end
 

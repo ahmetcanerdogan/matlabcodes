@@ -6,9 +6,16 @@ ucmd.timeinsec = (ucmd.header.stamp*10^-9-k);
 costmap.timeinsec = (costmap.header.stamp*10^-9-k);
 odom.timeinsec = (odom.header.stamp*10^-9-k);
 footprint.timeinsec = (footprint.header.stamp*10^-9-k);
+ara = 10;
+pose = [odom.pose.pose.position.x,odom.pose.pose.position.y,odom.pose.pose.position.z];
+ucmd.vec = [sqrt(0.5) * ucmd.command.linear.x/ 0.3520 ,sqrt(0.5) * ucmd.command.angular.z/0.4 ,zeros(length(ucmd.command.angular.z),1)]
 
 firstcommandtime = ucmd.timeinsec(find(ucmd.command.linear.x + ucmd.command.angular.z ,1));
 
+[valmaxy, indmaxy ]  = max(pose(:,2));
+
+arr1 = 1:indmaxy;
+arr2= indmaxy:length(pose(:,2));
 
 allobs=[0,0];
 for i =1: length(costmap.obs(1).x)
@@ -18,13 +25,18 @@ end
 
    allobs=[allobs ;obswithtime{i} ];
 end
-plot(pose(1:ara:end,1),pose(1:ara:end,2))
+
+plot(pose(arr1,1),pose(arr1,2))
 
 hold on
+
+plot(pose(arr2,1),pose(arr2,2) , 'r')
+
+
 plot(allobs(:,1) , allobs(:,2),'.')
 [selectedx,selectedy] = ginput(4);
 
-line1 = [selectedx(1:2) , selectedy(1:2)]
+line1 = [selectedx(1:2) , selectedy(1:2)];
 
 a = selectedy(1);
 b = selectedy(2);
@@ -32,7 +44,7 @@ c = selectedx(1);
 d = selectedx(2);
 
 udoor = [c-d a-b 0 ] / sqrt((c-d)^2 + (a-b)^2);
-ndoor = cross(udoor,[0 0 1]) 
+ndoor = cross(udoor,[0 0 1]) ;
 
 c1=1;
 x = c:0.001:d;
@@ -43,7 +55,7 @@ plot(x,l1,'r','LineWidth',3)
 middle =  [(d+c)/2 (-(a*d - b*c - a.*((d+c)/2 ) + b.*((d+c)/2 ))/(c - d))];
 
 
-safepass1 = [middle(1)+ndoor(1),middle(2)+ndoor(2)];
+safepass1 = [middle(1)+ ndoor(1) * sign(ndoor(2)),middle(2)+ndoor(2) * sign(ndoor(2))];
 plot(safepass1(1),safepass1(2),'*g')
 
 a = selectedy(3);
@@ -52,29 +64,27 @@ c = selectedx(3);
 d = selectedx(4);
 
 udoor2 = [c-d a-b 0 ] / sqrt((c-d)^2 + (a-b)^2);
-ndoor2 = cross(udoor2,[0 0 1]) 
+ndoor2 = cross(udoor2,[0 0 1]) ;
 x = c:0.001:d;
 l2 = -(a*d - b*c - a.*x + b.*x)/(c - d);
 plot(x,l2,'r','LineWidth',3)
 
 middle2 =  [(d+c)/2 (-(a*d - b*c - a.*((d+c)/2 ) + b.*((d+c)/2 ))/(c - d))];
 
-safepass2 = [middle2(1) - 3*ndoor2(1),middle2(2) - 3 * ndoor2(2)];
+safepass2 = [middle2(1) - 3*ndoor2(1) * sign(ndoor2(2)),middle2(2) - 3 * ndoor2(2) * sign(ndoor2(2))];
 plot(safepass2(1),safepass2(2),'*g')
 
 
 
-ara = 10;
-pose = [odom.pose.pose.position.x,odom.pose.pose.position.y,odom.pose.pose.position.z];
 
-dist1 = sqrt((pose(:,1) - safepass1(1)) .* (pose(:,1) - safepass1(1)) + (pose(:,2) - safepass1(2)) .* (pose(:,2) - safepass1(2))) ;
-dist2 = sqrt((pose(:,1) - safepass2(1)) .* (pose(:,1) - safepass2(1)) + (pose(:,2) - safepass2(2)) .* (pose(:,2) - safepass2(2))) ;
+dist1 = sqrt((pose(arr1,1) - safepass1(1)) .* (pose(arr1,1) - safepass1(1)) + (pose(arr1,2) - safepass1(2)) .* (pose(arr1,2) - safepass1(2))) ;
+dist2 = sqrt((pose(arr1,1) - safepass2(1)) .* (pose(arr1,1) - safepass2(1)) + (pose(arr1,2) - safepass2(2)) .* (pose(arr1,2) - safepass2(2))) ;
 
-[val1,ind1] = min(dist1)
-
+[val1,ind1] = min(dist1);
+[val2,ind2] = min(dist2);
 
 quats = [odom.pose.pose.orientation.w , odom.pose.pose.orientation.x , odom.pose.pose.orientation.y, odom.pose.pose.orientation.z];
-
+xvector = [1,0,0];
 
 for t = 1: length(odom.pose.pose.position.x)
     current_pose = pose(t,:);
@@ -84,24 +94,21 @@ for t = 1: length(odom.pose.pose.position.x)
     rott(t,:) = qvrot( [invquat(2),invquat(3),invquat(4),invquat(1)], xvector);
 %      [yaw(t), pitch(t), roll(t)] = quat2angle(quatinv(current_quat));
 end
-
-plot(pose(1:ara:end,1),pose(1:ara:end,2))
-
-hold on
-
-for t = 1:ara: length(odom.pose.pose.position.x)
+ButtonHandle = uicontrol('Style', 'PushButton', ...
+                         'String', 'Stop loop', ...
+                         'Callback', 'delete(gcbf)');
+for t = [ind1,ind2]
      current_time = odom.timeinsec(t);
-    current_quat = quats(t,:);
+
+ current_quat = quats(t,:);
      invquat = (current_quat);
+
      
     [minvalu,minindu] = min(abs(ucmd.timeinsec - current_time));
 current_vec = ucmd.vec(minindu,:);
     cmd_rot = qvrot( [invquat(2),invquat(3),invquat(4),invquat(1)], current_vec);
 
-    clf;
-    figure(1)
-    plot(pose(1:ara:end,1),pose(1:ara:end,2))
-    hold on
+
    
     [minvalc,minindc] = min(abs(costmap.timeinsec - current_time));
 %     display(['Time is ' , num2str(costmap.timeinsec(minindc(1))),' and ' , num2str(current_time) ])
@@ -121,4 +128,7 @@ fill (current_foot(:,1),current_foot(:,2),'r')
 
 end
 
+savename = ['S' num2str(input(1)) 'C' num2str(input(2)) 'T' num2str(input(3)),'pr.mat'];
+transitiontimes = [firstcommandtime , odom.timeinsec(ind1), odom.timeinsec(ind2) , odom.timeinsec(arr1(end))]
 
+save(savename,'ucmd','costmap','odom','footprint','transitiontimes', 'safepass1','safepass2','obswithtime')

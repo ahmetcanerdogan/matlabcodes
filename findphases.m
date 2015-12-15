@@ -47,7 +47,7 @@ udoor = [c-d a-b 0 ] / sqrt((c-d)^2 + (a-b)^2);
 ndoor = cross(udoor,[0 0 1]) ;
 
 c1=1;
-x = c:0.001:d;
+x = c:(0.001)*sign(d-c):d;
 l1 = -(a*d - b*c - a.*x + b.*x)/(c - d);
 
 plot(x,l1,'r','LineWidth',3)
@@ -65,7 +65,7 @@ d = selectedx(4);
 
 udoor2 = [c-d a-b 0 ] / sqrt((c-d)^2 + (a-b)^2);
 ndoor2 = cross(udoor2,[0 0 1]) ;
-x = c:0.001:d;
+x = c:(0.001)*sign(d-c):d;
 l2 = -(a*d - b*c - a.*x + b.*x)/(c - d);
 plot(x,l2,'r','LineWidth',3)
 
@@ -126,6 +126,7 @@ fill (current_foot(:,1),current_foot(:,2),'r')
 
 end
 
-
+savename = ['S' num2str(input(1)) 'C' num2str(input(2)) 'T' num2str(input(3)),'pr.mat'];
 transitiontimes = [firstcommandtime , odom.timeinsec(ind1), odom.timeinsec(ind2) , odom.timeinsec(arr1(end))]
 
+save(savename,'ucmd','costmap','odom','footprint','transitiontimes', 'safepass1','safepass2','obswithtime','Cainfo')

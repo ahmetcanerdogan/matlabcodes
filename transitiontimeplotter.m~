@@ -1,0 +1,39 @@
+clear all
+
+
+
+subjectspan=1;
+expspan = [0,1,2,3];
+trialspan = 1:3;
+tr1 = zeros(length(expspan),length(trialspan));
+tr2 = zeros(length(expspan),length(trialspan));
+tr3 = zeros(length(expspan),length(trialspan));
+tr4 = zeros(length(expspan),length(trialspan));
+
+for subject = subjectspan
+    count1=1;
+    for expcase = expspan
+        count2=1;
+        for trial = trialspan
+           name = ['S' num2str(subject) 'C' num2str(expcase) 'T' num2str(trial),'pr.mat'];
+            load(name);
+            subname = ['S' , num2str(subject),'_tr'];
+            varname = genvarname(subname);
+            eval([varname,'{1}(count1,count2) = transitiontimes(1);'])
+            eval([varname,'{2}(count1,count2) = transitiontimes(2);'])
+            eval([varname,'{3}(count1,count2) = transitiontimes(3);'])
+            eval([varname,'{4}(count1,count2) = transitiontimes(4);'])
+            
+            eval([varname,'_st{1}(count1,count2) = transitiontimes(2) - transitiontimes(1);'])
+            eval([varname,'_st{2}(count1,count2) =  transitiontimes(3) - transitiontimes(1);'])
+            eval([varname,'_st{3}(count1,count2) =  transitiontimes(4) - transitiontimes(1);'])
+            
+            count2 = count2+1;
+        end
+        count1=count1+1;
+    end
+    meanvals=[mean(eval([varname,'_st{1}']),2),mean(eval([varname,'_st{2}']),2),mean(eval([varname,'_st{3}']),2)];
+    stdvals=[std(eval([varname,'_st{1}']),0,2),std(eval([varname,'_st{2}']),0,2),std(eval([varname,'_st{3}']),0,2)];
+    figure()
+    boxplot(eval([varname,'_st{1}']))
+end
