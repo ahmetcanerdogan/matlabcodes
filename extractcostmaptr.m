@@ -5,7 +5,7 @@ subject = input(1);
 casenumber = input(2);
 trialnumber = input(3);
 
-topic  = '_costmap_translator_obstacles.csv'
+topic  = '_costmap_translator_obstacles.csv';
 topiclist=[];
 
 if expflag
@@ -122,7 +122,7 @@ end
             
             %   savestruct.(topicname) = eval(topicname); % Test this
     end
-            fclose all
+            fclose all;
 
     end
 

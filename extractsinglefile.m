@@ -6,8 +6,10 @@ casenumber = input(2);
 trialnumber = input(3);
 topiclist=[];
 
+% If experiment data is analyzed.
 if expflag
 
+% Name strings for experiments (lab data is with name, exp data will be identifiers.    
 switch input(1)
     case 1 
         nameofsubject = 'alex';
@@ -16,6 +18,7 @@ switch input(1)
         
 end
 
+% If trial number is higher than 2, then it is a head array experiment
 if trialnumber>2
     trialname = [num2str(trialnumber-2),'_ASL'];
 else
@@ -25,13 +28,14 @@ end
 name =[nameofsubject,'_C',num2str(casenumber),'_',trialname,'_2016*'];
 
 % Loading file
-
-
+% Test data is always put to an adjacent folder of matlabcodes
 folderoffile = [fileparts(pwd),'/TestFiles/', name];
-
+% Automatically fill rest of the message
 fullnameoffile=dir(folderoffile);
 fullnameoffile=[fileparts(pwd),'/TestFiles/',fullnameoffile.name];
 else
+    % For testing the code, this uses the sample data in the this folder
+    % it may give error in joym, though.
 currentdir = pwd;
 name =['Test',num2str(subject),'/Case',num2str(casenumber),'/Trial',num2str(trialnumber),'/csvs'];
 
@@ -74,7 +78,7 @@ end
                     varnames{j} = repnames(commas(j-1)+1:commas(j)-1);
                 end
                 count = count + 1 ;
-                % We are creating every column as a string, for the time being
+                % We are creating every column as a string for the time being
                 formatspecs = [formatspecs,'%s'];
             end
             varnames{ j + 1}= repnames(commas(end)+1:end);
@@ -112,7 +116,7 @@ end
                     namesegs = ['(varnames{j})'];
                 end
                     
-                % Check first 10 samples and convert them to doubles (otherwise too slow)
+                % Check first 10 samples and convert them to doubles (checking whole msg was too slow)
                 if isnan(str2double(dataArray{:,j}(1:min(length(dataArray{:,j}),10))))
                     eval(['output.' namesegs '= dataArray{:,j};']);
                 else
@@ -134,7 +138,7 @@ end
           output = -1;
           display(['Could not open file: ' ,  folderoffile ,'/', topic])
     end
-fclose all
+fclose all;
     
 % savefilename = [filenamin,'.mat'];
 % saveallfilename = [filenamin,'all.mat'];

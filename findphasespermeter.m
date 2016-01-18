@@ -19,7 +19,7 @@ costmap.timeinsec = (costmap.header.stamp*10^-9-k);
 odom.timeinsec = (odom.header.stamp*10^-9-k);
 footprint.timeinsec = (footprint.header.stamp*10^-9-k);
 pose = [odom.pose.pose.position.x,odom.pose.pose.position.y,odom.pose.pose.position.z];
-ucmd.vec = [sqrt(0.5) * ucmd.command.linear.x/ 0.3520 ,sqrt(0.5) * ucmd.command.angular.z/0.4 ,zeros(length(ucmd.command.angular.z),1)]
+ucmd.vec = [sqrt(0.5) * ucmd.command.linear.x/ 0.3520 ,sqrt(0.5) * ucmd.command.angular.z/0.4 ,zeros(length(ucmd.command.angular.z),1)];
 
 % For some reason joy_mouse may start with -1
 if max(joym.axes0)>9

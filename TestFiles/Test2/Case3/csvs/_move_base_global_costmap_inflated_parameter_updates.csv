@@ -1,4 +1,0 @@
-%time,field.bools0.name,field.bools0.value,field.doubles0.name,field.doubles0.value,field.doubles1.name,field.doubles1.value,field.groups0.name,field.groups0.state,field.groups0.id,field.groups0.parent
-1450210771055369593,enabled,1,cost_scaling_factor,30.0,inflation_radius,0.35,Default,1,0,0
-1450210771450987311,enabled,1,cost_scaling_factor,30.0,inflation_radius,0.5,Default,1,0,0
-1450210771478053255,enabled,1,cost_scaling_factor,30.0,inflation_radius,0.4,Default,1,0,0

@@ -1,9 +1,8 @@
 clear all
-input = [1 0 1]
 expflag=1;
 
 plotall = 0;
-allcases=[0,1,2]
+allcases=[0,1,2,3,4];
 
 for numberofsub = 1:2
     for cases = allcases
