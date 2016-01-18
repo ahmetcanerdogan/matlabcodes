@@ -1,4 +1,4 @@
-function output = extractcostmaptr(input)
+function output = extractcostmaptr(input,expflag)
 
 %Test this
 subject = input(1);
@@ -6,17 +6,48 @@ casenumber = input(2);
 trialnumber = input(3);
 
 topic  = '_costmap_translator_obstacles.csv'
+topiclist=[];
+
+if expflag
+
+switch input(1)
+    case 1 
+        nameofsubject = 'alex';
+ case 2 
+        nameofsubject = 'mahdieh';
+        
+end
+
+if trialnumber>2
+    trialname = [num2str(trialnumber-2),'_ASL'];
+else
+    trialname = num2str(trialnumber);
+end
+name =[nameofsubject,'_C',num2str(casenumber),'_',trialname,'_2016*'];
+
+% Loading file
+
+
+folderoffile = [fileparts(pwd),'/TestFiles/', name];
+
+fullnameoffile=dir(folderoffile);
+fullnameoffile=[fileparts(pwd),'/TestFiles/',fullnameoffile.name];
+else
+currentdir = pwd;
 name =['Test',num2str(subject),'/Case',num2str(casenumber),'/Trial',num2str(trialnumber),'/csvs'];
 
 topiclist=[];
 % Loading file
 currentdir = pwd;
 
-folderoffile = [currentdir , '/TestFiles/' , name];
 
 
+    
+    folderoffile = [currentdir , '/TestFiles/' , name];
+    fullnameoffile = folderoffile;
+end
 
-    fid = fopen ([folderoffile ,'/', topic]);
+    fid = fopen ([fullnameoffile ,'/', topic]);
     
     if(fid>0)
         %         Find field names
@@ -51,7 +82,7 @@ folderoffile = [currentdir , '/TestFiles/' , name];
             delimiter = ',';
             startRow = 2;
             endRow = inf;
-            fid = fopen ([folderoffile ,'/', topic]);
+            fid = fopen ([fullnameoffile ,'/', topic]);
             
             dataArray = textscan(fid, [formatspecs,'%[^\n\r]'], endRow(1)-startRow(1)+1, 'Delimiter', delimiter, 'EmptyValue' ,NaN,'HeaderLines', startRow(1)-1, 'ReturnOnError', false);
             for block=2:length(startRow)
@@ -90,9 +121,11 @@ folderoffile = [currentdir , '/TestFiles/' , name];
             
             
             %   savestruct.(topicname) = eval(topicname); % Test this
-        end
     end
-    
+            fclose all
+
+    end
+
 % savefilename = [filenamin,'.mat'];
 % saveallfilename = [filenamin,'all.mat'];
 % eval(['save ',savefilename,' ' , topiclist])
